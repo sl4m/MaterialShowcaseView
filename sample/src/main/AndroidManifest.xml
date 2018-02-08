@@ -28,6 +28,10 @@
             android:name=".SequenceExample"
             android:label="@string/title_activity_sequence_example" >
         </activity>
+        <activity
+            android:name=".SequenceWithSingleUseModeOnExample"
+            android:label="@string/title_activity_sequence_with_single_use_example" >
+        </activity>
     </application>
 
 </manifest>

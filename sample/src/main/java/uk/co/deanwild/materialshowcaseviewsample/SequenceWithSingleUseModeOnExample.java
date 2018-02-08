@@ -5,19 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
-
-public class SequenceExample extends AppCompatActivity implements View.OnClickListener {
+public class SequenceWithSingleUseModeOnExample extends AppCompatActivity implements View.OnClickListener {
 
     private Button mButtonOne;
     private Button mButtonTwo;
     private Button mButtonThree;
 
     private Button mButtonReset;
+
+    private static final String SHOWCASE_ID = "sequence example";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class SequenceExample extends AppCompatActivity implements View.OnClickLi
 
         } else if (v.getId() == R.id.btn_reset) {
 
+            MaterialShowcaseView.resetSingleUse(this, SHOWCASE_ID);
             Toast.makeText(this, "Showcase reset", Toast.LENGTH_SHORT).show();
         }
 
@@ -58,7 +59,7 @@ public class SequenceExample extends AppCompatActivity implements View.OnClickLi
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500); // half second between each showcase view
 
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
 
         sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
             @Override
