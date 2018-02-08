@@ -142,11 +142,11 @@ public class MaterialShowcaseSequence implements IDetachedListener {
                 mOnItemDismissedListener.onDismiss(showcaseView, mSequencePosition);
             }
 
+            mSequencePosition++;
             /**
              * If so, update the prefsManager so we can potentially resume this sequence in the future
              */
             if (mPrefsManager != null) {
-                mSequencePosition++;
                 mPrefsManager.setSequenceStatus(mSequencePosition);
             }
 
