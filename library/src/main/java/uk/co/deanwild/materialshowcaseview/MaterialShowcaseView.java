@@ -537,6 +537,11 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             return this;
         }
 
+        public Builder setTargetWithBoundConstraint(View target) {
+            showcaseView.setTarget(new ViewTarget(target, true));
+            return this;
+        }
+
         /**
          * Set the title text shown on the ShowcaseView.
          */
