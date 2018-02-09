@@ -746,7 +746,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         }
 
         mEraser = null;
-        mAnimationFactory = null;
+        mAnimationFactory = new NullAnimationFactory();
         mCanvas = null;
         mHandler = null;
 
