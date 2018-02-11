@@ -41,7 +41,6 @@ import uk.co.deanwild.materialshowcaseview.target.ViewTarget;
  * Helper class to show a sequence of showcase views.
  */
 public class MaterialShowcaseView extends FrameLayout implements View.OnTouchListener, View.OnClickListener {
-
     private int mOldHeight;
     private int mOldWidth;
     private Bitmap mBitmap;// = new WeakReference<>(null);
@@ -79,6 +78,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private IDetachedListener mDetachedListener;
     private boolean mTargetTouchable = false;
     private boolean mDismissOnTargetTouch = true;
+    private OnDismissedListener onDismissedListener;
 
     public MaterialShowcaseView(Context context) {
         super(context);
@@ -203,18 +203,30 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        boolean onTouchResult = true;
+
         if (mDismissOnTouch) {
             hide();
-        }
-        if(mTargetTouchable && mTarget.getBounds().contains((int)event.getX(), (int)event.getY())){
-            if(mDismissOnTargetTouch){
-                hide();
+            if (this.onDismissedListener != null) {
+                this.onDismissedListener.onDismiss(this, DismissType.OVERLAY);
             }
-            return false;
         }
-        return true;
+        if (mTargetTouchable && isTouchWithinBounds(event)) {
+            if (mDismissOnTargetTouch) {
+                hide();
+				if (this.onDismissedListener != null) {
+					this.onDismissedListener.onDismiss(this, DismissType.OVERLAY);
+				}
+            }
+            onTouchResult = false;
+        }
+
+        return onTouchResult;
     }
 
+    private boolean isTouchWithinBounds(MotionEvent event) {
+        return mTarget.getBounds().contains((int)event.getX(), (int)event.getY());
+    }
 
     private void notifyOnDisplayed() {
 
@@ -251,6 +263,9 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     @Override
     public void onClick(View v) {
         hide();
+        if (this.onDismissedListener != null) {
+            this.onDismissedListener.onDismiss(this, DismissType.DISMISS_BUTTON);
+        }
     }
 
     /**
@@ -435,6 +450,10 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
 
     private void setUseFadeAnimation(boolean useFadeAnimation) {
         mUseFadeAnimation = useFadeAnimation;
+    }
+
+    public void setOnDismissedListener(MaterialShowcaseView.OnDismissedListener listener) {
+        this.onDismissedListener = listener;
     }
 
     public void addShowcaseListener(IShowcaseListener showcaseListener) {
@@ -890,5 +909,9 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
 
     private void setRenderOverNavigationBar(boolean mRenderOverNav) {
         this.mRenderOverNav = mRenderOverNav;
+    }
+
+    public interface OnDismissedListener {
+        void onDismiss(MaterialShowcaseView view, DismissType dismissType);
     }
 }

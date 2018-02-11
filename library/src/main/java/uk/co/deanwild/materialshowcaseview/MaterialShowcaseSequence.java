@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
-public class MaterialShowcaseSequence implements IDetachedListener {
+public class MaterialShowcaseSequence implements IDetachedListener, MaterialShowcaseView.OnDismissedListener {
 
     PrefsManager mPrefsManager;
     Queue<MaterialShowcaseView> mShowcaseQueue;
@@ -18,6 +18,8 @@ public class MaterialShowcaseSequence implements IDetachedListener {
 
     private OnSequenceItemShownListener mOnItemShownListener = null;
     private OnSequenceItemDismissedListener mOnItemDismissedListener = null;
+    private OnSequenceItemDismissedByButtonListener onItemDismissedByButtonListener = null;
+    private OnSequenceItemDismissedByOverlayListener onItemDismissedByOverlayListener = null;
 
     public MaterialShowcaseSequence(Activity activity) {
         mActivity = activity;
@@ -70,6 +72,14 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         this.mOnItemDismissedListener = listener;
     }
 
+    public void setOnItemDismissedByButtonListener(OnSequenceItemDismissedByButtonListener listener) {
+        this.onItemDismissedByButtonListener = listener;
+    }
+
+    public void setOnItemDismissedByOverlayListener(OnSequenceItemDismissedByOverlayListener listener) {
+        this.onItemDismissedByOverlayListener = listener;
+    }
+
     public boolean hasFired() {
 
         if (mPrefsManager.getSequenceStatus() == PrefsManager.SEQUENCE_FINISHED) {
@@ -113,6 +123,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         if (mShowcaseQueue.size() > 0 && !mActivity.isFinishing()) {
             MaterialShowcaseView sequenceItem = mShowcaseQueue.remove();
             sequenceItem.setDetachedListener(this);
+            sequenceItem.setOnDismissedListener(this);
             sequenceItem.show(mActivity);
             if (mOnItemShownListener != null) {
                 mOnItemShownListener.onShow(sequenceItem, mSequencePosition);
@@ -154,6 +165,17 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         }
     }
 
+    @Override
+    public void onDismiss(MaterialShowcaseView view, DismissType dismissType) {
+        if (this.onItemDismissedByButtonListener != null &&
+            dismissType == DismissType.DISMISS_BUTTON) {
+            this.onItemDismissedByButtonListener.onDismissedByButtonTouch(view, mSequencePosition);
+        } else if (this.onItemDismissedByOverlayListener != null &&
+            dismissType == DismissType.OVERLAY) {
+            this.onItemDismissedByOverlayListener.onDismissedByOverlayTouch(view, mSequencePosition);
+        }
+    }
+
     public void setConfig(ShowcaseConfig config) {
         this.mConfig = config;
     }
@@ -166,4 +188,11 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         void onDismiss(MaterialShowcaseView itemView, int position);
     }
 
+    public interface OnSequenceItemDismissedByButtonListener {
+        void onDismissedByButtonTouch(MaterialShowcaseView itemView, int position);
+    }
+
+    public interface OnSequenceItemDismissedByOverlayListener {
+        void onDismissedByOverlayTouch(MaterialShowcaseView itemView, int position);
+    }
 }

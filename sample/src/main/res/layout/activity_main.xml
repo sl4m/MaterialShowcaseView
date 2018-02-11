@@ -34,6 +34,14 @@
         android:layout_margin="10dp"/>
 
     <Button
+        android:id="@+id/btn_sequence_with_listeners_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Sequence with Dismiss Listeners Example"
+        android:layout_margin="10dp"/>
+
+    <Button
         android:id="@+id/btn_sequence_with_single_use_mode_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

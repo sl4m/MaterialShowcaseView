@@ -29,6 +29,10 @@
             android:label="@string/title_activity_sequence_example" >
         </activity>
         <activity
+            android:name=".SequenceWithListenersExample"
+            android:label="@string/title_activity_sequence_with_listeners_example" >
+        </activity>
+        <activity
             android:name=".SequenceWithSingleUseModeOnExample"
             android:label="@string/title_activity_sequence_with_single_use_example" >
         </activity>
