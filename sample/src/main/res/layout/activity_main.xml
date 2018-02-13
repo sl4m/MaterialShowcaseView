@@ -50,6 +50,14 @@
         android:layout_margin="10dp"/>
 
     <Button
+        android:id="@+id/btn_sequence_bound_constraint_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Simple Sequence with Bound Constraint Example"
+        android:layout_margin="10dp"/>
+
+    <Button
         android:id="@+id/btn_reset_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
